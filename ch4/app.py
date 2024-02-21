@@ -4,16 +4,16 @@ from search import answer_question
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-# 最初にメッセージを表示する
-print("質問を入力してください")
+# 먼저 메시지 표시하기
+print("질문을 입력하세요")
 
 conversation_history = []
 
 while True:
-    # ユーザーの入力した文字を変数「user_input」に格納
+    # 사용자가 입력한 문자를 'user_input' 변수에 저장
     user_input = input()
 
-    # ユーザーの入力した文字が「exit」の場合はループを抜ける
+    # 사용자가 입력한 문자가 'exit'인 경우 루프에서 빠져나옴
     if user_input == "exit":
         break
     

@@ -5,61 +5,61 @@ from openai.embeddings_utils import distances_from_embeddings
 
 def create_context(question, df, max_len=1800):
     """
-    質問と学習データを比較して、コンテキストを作成する関数
+        질문과 학습 데이터를 비교해 컨텍스트를 만드는 함수
     """
 
-    # 質問をベクトル化
-    q_embeddings = openai.Embedding.create(input=question,engine='text-embedding-ada-002')['data'][0]['embedding']
+    # 질문을 벡터화
+    q_embeddings = openai.Embedding.create(input=question, engine='text-embedding-ada-002')['data'][0]['embedding']
 
-    # 質問と学習データと比較してコサイン類似度を計算し、
-    # 「distances」という列に類似度を格納
-    df['distances'] = distances_from_embeddings(q_embeddings,df['embeddings'].apply(eval).apply(np.array).values, distance_metric='cosine')
+    # 질문과 학습 데이터와 비교하여 코사인 유사도를 계산하고
+    # 'distances' 열에 유사도를 저장
+    df['distances'] = distances_from_embeddings(q_embeddings, df['embeddings'].apply(eval).apply(np.array).values, distance_metric='cosine')
     
-    # コンテキストを格納するためのリスト
+    # 컨텍스트를 저장하기 위한 리스트
     returns = []
-    # コンテキストの現在の長さ
+    # 컨텍스트의 현재 길이
     cur_len = 0
 
-    # 学習データを類似度順にソートし、トークン数の上限までコンテキストに
-    # 追加する
+    # 학습 데이터를 유사도 순으로 정렬하고 토큰 개수 한도까지 컨텍스트에
+    # 추가
     for _, row in df.sort_values('distances', ascending=True).iterrows():
-        # テキストの長さを現在の長さに加える
+        # 텍스트 길이를 현재 길이에 더하기
         cur_len += row['n_tokens'] + 4
 
-        # テキストが長すぎる場合はループを終了
+        # 텍스트가 너무 길면 루프 종료
         if cur_len > max_len:
             break
 
-        # コンテキストのリストにテキストを追加する
+        # 컨텍스트 목록에 텍스트 추가하기
         returns.append(row["text"])
 
-    # コンテキストを結合して返す
+    # 컨텍스트를 결합해 반환
     return "\n\n###\n\n".join(returns)
 
 def answer_question(question, conversation_history):
     """
-    コンテキストに基づいて質問に答える関数
+    문맥에 따라 질문에 답하는 기능
     """
 
-    # 学習データを読み込む
-    df = pd.read_csv('embeddings.csv', encoding="ANSI")
+    # 학습 데이터 불러오기
+    df = pd.read_csv('embeddings.csv')
 
-    context = create_context (question, df, max_len=200)
-    # プロンプトを作成し、会話の履歴に追加
-    prompt = f"あなたはとあるホテルのスタッフです。コンテキストに基づいて、お客様からの質問に丁寧に答えてください。コンテキストが質問に対して回答できない場合は「わかりません」と答えてください。\n\nコンテキスト: {context}\n\n---\n\n質問: {question}\n回答:"
+    context = create_context(question, df, max_len=200)  #←질문과 학습 데이터를 비교해 컨텍스트 생성
+    # 프롬프트를 생성하고 대화 기록에 추가하기
+    prompt = f"당신은 어느 호텔 직원입니다. 문맥에 따라 고객의 질문에 정중하게 대답해 주십시오. 컨텍스트가 질문에 대답할 수 없는 경우 '모르겠습니다'라고 대답하세요.\n\n컨텍스트: {context}\n\n---\n\n질문: {question}\n답변:"
     conversation_history.append({"role": "user", "content": prompt})
 
     try:
-        # ChatGPTからの回答を生成
+        # ChatGPT에서 답변 생성
         response = openai.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=conversation_history,
-        temperature=1,
+            model="gpt-3.5-turbo",
+            messages=conversation_history,
+            temperature=1,
         )
 
-        # ChatGPTからの回答を返す
+        # ChatGPT에서 답변 반환
         return response.choices[0].message.content.strip()
     except Exception as e:
-        # エラーが発生した場合は空の文字列を返す
+        # 오류가 발생하면 빈 문자열을 반환
         print(e)
         return ""

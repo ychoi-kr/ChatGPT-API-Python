@@ -1,10 +1,10 @@
 import pandas as pd
-# 正規表現を扱うためのライブラリ
+# 정규표현식을 다루기 위한 라이브러리
 import re
 
 def remove_newlines(text):
     """
-    文字列内の改行と連続する空白を削除する関数
+    문자열의 줄 바꿈과 연속된 공백을 삭제하는 함수
     """
     text = re.sub(r'\n', ' ', text)
     text = re.sub(r' +', ' ', text)
@@ -12,36 +12,36 @@ def remove_newlines(text):
 
 def text_to_df(data_file):
     """
-    #テキストファイルを処理してDataFrameを返す関数
+    텍스트 파일을 처리하여 DataFrame을 반환하는 함수
     """
-    # テキストを格納するための空のリストを作成
+    # 텍스트를 저장할 빈 목록 만들기
     texts = []
 
-    # 指定されたファイル（data_file）を読み込み、変数「file」に格納
+    # 지정된 파일(data_file)을 읽어들여 변수 'file'에 저장
     with open(data_file, 'r', encoding="utf-8") as file:
-        # ファイルの内容を文字列として読み込む
+        # 파일 내용을 문자열로 불러오기
         text = file.read()
-        # 改行2つで文字列を分割
+        # 줄 바꿈으로 문자열을 두 줄로 나누기
         sections = text.split('\n\n')
 
-        # 各セクションに対して処理を行う
+        # 각 섹션에 대해 처리하기
         for section in sections:
-            # セクションを改行で分割する
+            # 섹션을 줄 바꿈으로 나누기
             lines = section.split('\n')
-            # 「lines」リストの最初の要素を取得
+            # "lines" 목록의 첫 번째 요소를 얻기
             fname = lines[0]
-            # 「lines」リストの2番目以降の要素を取得
+            # 'lines' 목록의 두 번째 이후 요소를 얻기
             content = ' '.join(lines[1:])
-            # 「fname」と「content」をリストに追加
+            # fname과 content를 리스트에 추가
             texts.append([fname, content])
 
-    # リストからDataFrameを作成
+    # 목록에서 DataFrame 생성
     df = pd.DataFrame(texts, columns=['fname', 'text'])
-    # 「text」列内の改行を削除
+    # 'text' 열의 줄 바꿈 제거
     df['text'] = df['text'].apply(remove_newlines)
 
     return df
 
-df = text_to_df('data.txt')
-# 「scraped.csv」ファイルに書き込む
+df = text_to_df('data.txt')  #←'data.txt'의 데이터를 처리
+# 'scraped.csv' 파일에 쓰기
 df.to_csv('scraped.csv', index=False, encoding='utf-8')
