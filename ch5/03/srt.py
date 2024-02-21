@@ -1,10 +1,11 @@
 import openai
 import os
 openai.api_key = os.environ["OPENAI_API_KEY"]
+client = openai.OpenAI()
 
 file = open("sample.wav", "rb")
 
-transcript = openai.Audio.transcribe(
+transcript = client.audio.transcriptions.create(
     model="whisper-1",
     file=file,
     # 매개변수 추가

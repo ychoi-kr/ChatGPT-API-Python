@@ -1,11 +1,15 @@
 import openai
+import os
+openai.api_key = os.environ["OPENAI_API_KEY"]
+client = openai.OpenAI()
 
 file = open("sample.wav", "rb")
 
-transcript = openai.Audio.transcribe(
+transcript = client.audio.transcriptions.create(
     model="whisper-1",
     file=file,
 )
+
 # 챗GPT로 요약하기
 summary = openai.chat.completions.create(
     model="gpt-3.5-turbo",
@@ -18,3 +22,4 @@ summary = openai.chat.completions.create(
 )
 
 print(summary.choices[0].message.content)
+print(f"요약에 사용한 토큰 수: {summary.usage.total_tokens}")
