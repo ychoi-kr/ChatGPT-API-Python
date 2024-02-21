@@ -7,7 +7,7 @@ file = open("sample.wav", "rb")
 transcript = openai.Audio.transcribe(
     model="whisper-1",
     file=file,
-    ## パラメータを追加
+    # 매개변수 추가
     response_format="srt"
 )
 

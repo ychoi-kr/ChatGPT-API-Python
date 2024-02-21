@@ -6,4 +6,4 @@ transcript = openai.Audio.transcribe(
     file=file,
 )
 
-print(transcript.text) #結果を表示
+print(transcript.text) # 결과를 표시

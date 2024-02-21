@@ -15,10 +15,10 @@ summary = openai.chat.completions.create(
     messages=[
         {
             "role": "user",
-            "content": f"以下の文章を日本語に翻訳し、3行の箇条書きで要約してください:\n{transcript}"
+            "content": f"다음 문장을 한국어로 번역하고 3줄의 글 머리 기호로 요약하세요:\n{transcript}"
         }
     ]
 )
 
-print(f"要約結果: \n{summary.choices[0].message.content}")
-print(f"要約に使用したトークン数: {summary.usage.total_tokens}")
+print(f"요약 결과: \n{summary.choices[0].message.content}")
+print(f"요약에 사용한 토큰 수: {summary.usage.total_tokens}")
