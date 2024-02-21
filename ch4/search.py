@@ -4,6 +4,7 @@ import numpy as np
 from typing import List
 from scipy import spatial
 
+client = openai.OpenAI()
 
 def create_context(question, df, max_len=1800):
     """
@@ -11,7 +12,7 @@ def create_context(question, df, max_len=1800):
     """
 
     # 질문을 벡터화
-    q_embeddings = openai.Embedding.create(input=question, engine='text-embedding-ada-002')['data'][0]['embedding']
+    q_embeddings = client.embeddings.create(input=[question], model='text-embedding-3-small').data[0].embedding
 
     # 질문과 학습 데이터와 비교하여 코사인 유사도를 계산하고
     # 'distances' 열에 유사도를 저장
@@ -66,7 +67,7 @@ def answer_question(question, conversation_history):
         print(e)
         return ""
     
-# 각 문장의 토큰 수를 계산하여 새로운 열 'n_tokens'에 저장(openai-python v0.28.1 코드에서 가져옴) -- 옮긴이
+# 각 문장의 토큰 수를 계산하여 새로운 열 'n_tokens'에 저장(옮긴이가 추가함)
 def distances_from_embeddings(
     query_embedding: List[float],
     embeddings: List[List[float]],
