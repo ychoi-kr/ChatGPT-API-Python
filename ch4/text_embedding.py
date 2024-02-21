@@ -1,6 +1,10 @@
 import pandas as pd
 import tiktoken
-from openai.embeddings_utils import get_embedding
+import os
+import openai
+
+openai.api_key = os.environ["OPENAI_API_KEY"]
+client = openai.OpenAI()
 
 embedding_model = "text-embedding-ada-002"
 embedding_encoding = "cl100k_base"
@@ -67,6 +71,11 @@ df = pd.DataFrame(shortened, columns = ['text'])
 
 # 각 'text'의 토큰 수를 계산하여 새로운 열 'n_tokens'에 저장
 df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
+
+# 'text' 열의 텍스트에 대해 embedding을 수행하여 CSV 파일로 저장(openai-python v0.28.1 코드에서 가져옴) -- 옮긴이
+def get_embedding(text, model="text-embedding-ada-002"):
+   text = text.replace("\n", " ")
+   return client.embeddings.create(input = [text], model=model).data[0].embedding
 
 #'text' 열의 텍스트에 대해 embedding을 수행하여 CSV 파일로 저장
 df["embeddings"] = df.text.apply(lambda x: get_embedding(x, engine=embedding_model))

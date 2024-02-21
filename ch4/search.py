@@ -1,7 +1,9 @@
 import pandas as pd
 import openai
 import numpy as np
-from openai.embeddings_utils import distances_from_embeddings
+from typing import List
+from scipy import spatial
+
 
 def create_context(question, df, max_len=1800):
     """
@@ -63,3 +65,22 @@ def answer_question(question, conversation_history):
         # 오류가 발생하면 빈 문자열을 반환
         print(e)
         return ""
+    
+# 각 문장의 토큰 수를 계산하여 새로운 열 'n_tokens'에 저장(openai-python v0.28.1 코드에서 가져옴) -- 옮긴이
+def distances_from_embeddings(
+    query_embedding: List[float],
+    embeddings: List[List[float]],
+    distance_metric="cosine",
+) -> List[List]:
+    """Return the distances between a query embedding and a list of embeddings."""
+    distance_metrics = {
+        "cosine": spatial.distance.cosine,
+        "L1": spatial.distance.cityblock,
+        "L2": spatial.distance.euclidean,
+        "Linf": spatial.distance.chebyshev,
+    }
+    distances = [
+        distance_metrics[distance_metric](query_embedding, embedding)
+        for embedding in embeddings
+    ]
+    return distances
