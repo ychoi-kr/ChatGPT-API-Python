@@ -1,8 +1,8 @@
 import gpt_api
 import twitter_api
 
-# ChatGPTからツイート内容を取得
+# 챗GPT에서 트윗 내용 가져오기
 tweet = gpt_api.make_tweet()
 
-# Twitterにツイートを投稿
+# 트위터에 트윗을 올리기
 twitter_api.post(tweet)

@@ -1,22 +1,22 @@
-# ライブラリ「openai」の読み込み
+# openai 라이브러리 불러오기
 import openai
 import os
-# OpenAIのAPIキーを設定
+# OpenAI의 API 키 설정
 openai.api_key = os.environ["OPENAI_API_KEY"]
 
-# ChatGPTにリクエストを送信する関数を定義
+# 챗GPT에 요청을 전송하는 함수 정의
 def make_tweet():
-    # ChatGPTに対する命令文を設定
-    request = "私はIT関係の企業に勤める入社一年目の新入社員です。私に代わってTwitter投稿するツイートを140字以内で作成してください。\n\nツイートを作成する際は、以下の文を参考にしてください。\n\n"
-    # 例文として与える投稿文を設定
-    tweet1 = "例文1：仕事でPythonを使うことになりそうだから、現在勉強中！プログラミグとか難しくてよくわからないよ...\n\n"
+    # 챗GPT에 대한 명령문 설정
+    request = "저는 IT 관련 기업에 근무하는 입사 1년차 신입사원입니다. 저를 대신해 트위터에 올릴 트윗을 140자 이내로 작성해 주세요. n\n\n 트윗을 작성할 때 다음 예문을 참고해 주세요.\n\n"
+    # 예문으로 줄 포스팅 문장 설정
+    tweet1 = "예문1: 직장에서 파이썬을 사용하게 될 것 같아서 현재 공부 중입니다! 프로그래밍이라든가 어려워서 잘 모르겠어...\n\n"
 
-    tweet2 = "例文2：最近ChatGPTについていろいろ調べてるんだけど、あれってなんでも質に答えてくれてすごいよね！とりあえずPythonを使って、簡単な会話をするプログラムをいてみるつもり。うまくできるかな？\n\n "
+    tweet2 = "예문2: 최근에 ChatGPT에 대해 여러 가지를 알아보고 있는데, 어떤 질문에도 대답해줘서 정말 대단하네요! 일단 Python으로 간단한 대화를 하는 프로그램을 작성해 볼 생각이에요. 잘 할 수 있을까?\n\n "
 
-    # 文章を連結して一つの命令文にする
+    # 문장을 연결해 하나의 명령문으로 만들기
     content = request + tweet1 + tweet2
 
-    # ChatGPTにリクエストを送信
+    # 챗GPT에 요청 보내기
     response = openai.chat.completions.create(
         model = "gpt-3.5-turbo",
         messages = [
@@ -24,5 +24,5 @@ def make_tweet():
         ],
     )
 
-    # 投稿文の内容を返却
+    # 게시글 내용 반환
     return response.choices[0].message.content
