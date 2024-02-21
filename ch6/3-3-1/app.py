@@ -8,10 +8,10 @@ def create_prompt(user_input):
     prompt = PromptTemplate(
         input_variables=["theme"], 
         template="""
-        あなたはニュース記事を書くブロガーです。
-        下記のテーマについて、Google検索で最新情報を取得し、取得した情報にもとづいてニュース記事を書いてください。1000文字以上で、日本語で出力してください。記事の末尾に参考にしたURLを参照元としてタイトルとURLを出力してください。
+        당신은 뉴스 기사를 쓰는 블로거입니다.
+        다음 주제에 대해 구글 검색을 통해 최신 정보를 얻고, 그 정보를 바탕으로 뉴스 기사를 작성해 주세요. 1000자 이상, 한국어로 출력해 주세요. 기사 말미에 참고한 URL을 참조 출처로 제목과 URL을 출력해 주세요.
         ###
-        テーマ：{theme}
+        테마 : {theme}
         """
     )
     return prompt.format(theme=user_input)
@@ -29,13 +29,13 @@ def define_tools():
 def write_response_to_file(response, filename):
     with open(filename, 'w', encoding='utf-8') as file:
         file.write(response)
-    print('出力が完了しました')
+    print('출력이 완료되었습니다')
 
 def main():
     llm = ChatOpenAI(temperature=0, model="gpt-3.5-turbo", max_tokens=2000)
     tools = define_tools()
     agent = initialize_agent(tools, llm, agent=AgentType.OPENAI_FUNCTIONS)
-    prompt = create_prompt(input("記事のテーマを入力してください： "))
+    prompt = create_prompt(input("글의 테마를 입력해 주세요： "))
     response = agent.run(prompt)
     write_response_to_file(response, 'output.txt')
 
