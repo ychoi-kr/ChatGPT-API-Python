@@ -10,7 +10,7 @@ transcript = openai.Audio.translate(
 )
 
 # ChatGPTで要約する
-summary = openai.ChatCompletion.create(
+summary = openai.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
         {

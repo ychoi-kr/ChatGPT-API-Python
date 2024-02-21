@@ -17,7 +17,7 @@ def make_tweet():
     content = request + tweet1 + tweet2
 
     # ChatGPTにリクエストを送信
-    response = openai.ChatCompletion.create(
+    response = openai.chat.completions.create(
         model = "gpt-3.5-turbo",
         messages = [
             {"role": "user", "content": content},
@@ -25,4 +25,4 @@ def make_tweet():
     )
 
     # 投稿文の内容を返却
-    return response.choices[0]["message"]["content"]
+    return response.choices[0].message.content

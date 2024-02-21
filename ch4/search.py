@@ -51,14 +51,14 @@ def answer_question(question, conversation_history):
 
     try:
         # ChatGPTからの回答を生成
-        response = openai.ChatCompletion.create(
+        response = openai.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=conversation_history,
         temperature=1,
         )
 
         # ChatGPTからの回答を返す
-        return response.choices[0]["message"]["content"].strip()
+        return response.choices[0].message.content.strip()
     except Exception as e:
         # エラーが発生した場合は空の文字列を返す
         print(e)
