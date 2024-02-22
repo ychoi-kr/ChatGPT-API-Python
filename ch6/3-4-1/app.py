@@ -1,8 +1,8 @@
 from langchain.agents import initialize_agent, Tool
-from langchain.utilities import GoogleSearchAPIWrapper
+from langchain_community.utilities import GoogleSearchAPIWrapper
 from langchain.prompts import PromptTemplate
 from langchain.agents import AgentType
-from langchain.chat_models import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 def create_prompt(user_input):
     prompt = PromptTemplate(
