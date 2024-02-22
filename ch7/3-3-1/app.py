@@ -4,40 +4,40 @@ import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.ticker import MultipleLocator, FuncFormatter
 def write_to_csv(billing_data):
-    # CSVファイル名
+    # CSV 파일명
     csv_file = "invoices.csv"
 
-    # ヘッダーを決定（JSONのキーから）
+    # 헤더를 결정 (JSON의 키에서)
     header = billing_data[0].keys()
 
-    # CSVファイルを書き込みモードで開き、データを書き込む
-    with open(csv_file, "w", newline="", encoding="utf-8") as f:
+    # CSV 파일을 쓰기 모드로 열어 데이터를 쓰기
+    with open(csv_file, 'w', newline='', encoding='utf-8') as f:
         writer = csv.DictWriter(f, fieldnames=header)
         writer.writeheader()
         writer.writerows(billing_data)
 
 def draw_graph(filename):
-    # invoices.csvファイルからpandasのDataFrameに読み込み（数値のカンマ区切りに対応）
+    # pandas의 DataFrame으로 'invoices.csv' 파일에서 데이터 읽기 (숫자의 콤마 구분에 대응)
     df = pd.read_csv("invoices.csv", thousands=",")
 
-    # 日付のフォーマットを変換
-    df["日付"] = pd.to_datetime(
-        df["日付"].str.replace("年", "-").str.replace("月", "-").str.replace("日", ""),
+    # 날짜 형식 변환
+    df["날짜"] = pd.to_datetime(
+        df["날짜"].str.replace("년", "-").str.replace("월", "-").str.replace("일", ""),
         format="%Y-%m-%d",
     )
 
-    # グラフを描画
+    # 그래프 그리기
     fig, ax = plt.subplots()
-    ax.bar(df["日付"], df["請求金額（合計）"])
+    ax.bar(df["날짜"], df["청구금액(총액)"])
     ax.set_xlabel("date")
     ax.set_ylabel("price")
-    ax.set_xticks(df["日付"])
-    ax.set_xticklabels(df["日付"].dt.strftime("%Y-%m-%d"), rotation=45)
+    ax.set_xticks(df["날짜"])
+    ax.set_xticklabels(df["날짜"].dt.strftime("%Y-%m-%d"), rotation=45)
 
-    # y軸の最小値を0に設定
-    ax.set_ylim(0, max(df["請求金額（合計）"]) + 100000)
+    # y축의 최솟값을 0으로 설정
+    ax.set_ylim(0, max(df["청구금액(총액)"]) + 100000)
 
-    # 縦軸のラベルを元の数字のまま表示
+    # y축 라벨을 원래 숫자로 표시
     ax.get_yaxis().set_major_formatter(FuncFormatter(lambda x, p: format(int(x), ",")))
 
     plt.tight_layout()
@@ -45,13 +45,13 @@ def draw_graph(filename):
 
 
 def main():
-    # 「data」フォルダ以下のPDFファイルを読み込み、json形式のデータを受け取る
+    # data 폴더 아래의 PDF 파일을 읽고 JSON 형태의 데이터 받기
     billing_data = load_pdf.load_all_pdfs("data")
-    print("読み込みが完了しました")
+    print("데이터 로드 완료")
 
-    # json形式のデータをCSVファイルに書き込む
+    # JSON 형태의 데이터를 CSV 파일로 쓰기
     write_to_csv(billing_data)
-    print("CSVファイルへの書き込みが完了しました")
+    print("CSV 파일 쓰기 완료")
 
     draw_graph("invoices.csv")
 
