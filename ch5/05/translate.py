@@ -1,17 +1,14 @@
-import openai
-import os
-openai.api_key = os.environ["OPENAI_API_KEY"]
-client = openai.OpenAI()
+from openai import OpenAI
+client = OpenAI()
 
 file = open("sample.wav", "rb")
-
 transcript = client.audio.translations.create(
     model="whisper-1",
     file=file,
 )
 
 # ChatGPT로 요약
-summary = openai.chat.completions.create(
+summary = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
         {
