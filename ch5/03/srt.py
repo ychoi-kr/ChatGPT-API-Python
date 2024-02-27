@@ -1,10 +1,7 @@
-import openai
-import os
-openai.api_key = os.environ["OPENAI_API_KEY"]
-client = openai.OpenAI()
+from openai import OpenAI
+client = OpenAI()
 
 file = open("sample.wav", "rb")
-
 transcript = client.audio.transcriptions.create(
     model="whisper-1",
     file=file,
