@@ -1,8 +1,4 @@
-import os
-import openai
 from search import answer_question
-
-openai.api_key = os.environ["OPENAI_API_KEY"]
 
 # 먼저 메시지 표시하기
 print("질문을 입력하세요")

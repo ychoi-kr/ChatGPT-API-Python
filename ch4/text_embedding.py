@@ -1,11 +1,9 @@
 import pandas as pd
 import tiktoken
-import os
-import openai
+from openai import OpenAI
 from typing import List
 
-openai.api_key = os.environ["OPENAI_API_KEY"]
-client = openai.OpenAI()
+client = OpenAI()
 
 embedding_model = "text-embedding-3-small"
 embedding_encoding = "cl100k_base"

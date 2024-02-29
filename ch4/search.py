@@ -1,10 +1,10 @@
 import pandas as pd
-import openai
+from openai import OpenAI
 import numpy as np
 from typing import List
 from scipy import spatial
 
-client = openai.OpenAI()
+client = OpenAI()
 
 def create_context(question, df, max_len=1800):
     """
