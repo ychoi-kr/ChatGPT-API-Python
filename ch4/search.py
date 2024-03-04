@@ -54,7 +54,7 @@ def answer_question(question, conversation_history):
 
     try:
         # ChatGPT에서 답변 생성
-        response = openai.chat.completions.create(
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=conversation_history,
             temperature=1,
