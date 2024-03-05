@@ -2,7 +2,7 @@ import load_pdf
 import csv
 import matplotlib.pyplot as plt
 import pandas as pd
-from matplotlib.ticker import MultipleLocator, FuncFormatter
+from matplotlib.ticker import FuncFormatter
 def write_to_csv(billing_data):
     # CSV 파일명
     csv_file = "invoices.csv"
@@ -21,18 +21,18 @@ def draw_graph(filename):
     df = pd.read_csv("invoices.csv", thousands=",")
 
     # 날짜 형식 변환
-    df["날짜"] = pd.to_datetime(
-        df["날짜"].str.replace("년", "-").str.replace("월", "-").str.replace("일", ""),
+    df["발행일"] = pd.to_datetime(
+        df["발행일"].str.replace(" ", "").str.replace("년", "-").str.replace("월", "-").str.replace("일", ""),
         format="%Y-%m-%d",
     )
 
     # 그래프 그리기
     fig, ax = plt.subplots()
-    ax.bar(df["날짜"], df["청구금액(총액)"])
+    ax.bar(df["발행일"], df["청구금액(총액)"])
     ax.set_xlabel("date")
     ax.set_ylabel("price")
-    ax.set_xticks(df["날짜"])
-    ax.set_xticklabels(df["날짜"].dt.strftime("%Y-%m-%d"), rotation=45)
+    ax.set_xticks(df["발행일"])
+    ax.set_xticklabels(df["발행일"].dt.strftime("%Y-%m-%d"), rotation=45)
 
     # y축의 최솟값을 0으로 설정
     ax.set_ylim(0, max(df["청구금액(총액)"]) + 100000)

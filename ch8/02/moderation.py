@@ -1,8 +1,9 @@
-import openai
+from openai import OpenAI
+client = OpenAI()
 
-response = openai.Moderation.create(
+response = client.moderations.create(
     input="안녕하세요!"
 )
-output = response["results"][0]
+output = response.model_dump_json(indent=2)
 
 print(output)
