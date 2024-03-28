@@ -15,6 +15,7 @@ df.columns = ['title', 'text']
 
 tokenizer = tiktoken.get_encoding(embedding_encoding)
 df['n_tokens'] = df.text.apply(lambda x: len(tokenizer.encode(x)))
+
 def split_into_many (text, max_tokens = 500):
 
     # 텍스트를 문장별로 나누어 각 문장의 토큰 개수를 구함
@@ -48,6 +49,7 @@ def split_into_many (text, max_tokens = 500):
     if chunk:
         chunks.append(". ".join(chunk) + ".")
     return chunks
+
 # 축약된 텍스트를 저장하기 위한 리스트
 shortened = []
 
